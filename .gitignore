@@ -1,0 +1,9 @@
+.vscode/
+data/
+output/
+__pycache__/
+build/
+*.py[cod]
+*.so
+*.json
+

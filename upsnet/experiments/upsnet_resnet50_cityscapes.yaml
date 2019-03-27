@@ -1,0 +1,66 @@
+---
+output_path: "./output/upsnet/cityscapes"
+model_prefix: "upsnet_resnet_50_cityscapes_"
+symbol: resnet_50_upsnet
+gpus: '0'
+dataset:
+  num_classes: 9
+  num_seg_classes: 19
+  dataset: Cityscapes
+  dataset_path: "./data/cityscapes/"
+  image_set: train
+  root_path: "./data/"
+  test_image_set: val
+
+network:
+  has_rpn: true
+  has_rcnn: true
+  has_mask_head: true
+  has_fcn_head: true
+  fcn_head: "FCNHead"
+  fcn_num_layers: 2
+  has_panoptic_head: true
+  pretrained: "./model/pretrained_model/resnet-50-caffe.pth"
+  
+
+train:
+  use_horovod: true
+  scales:
+  - 800
+  - 832
+  - 864
+  - 896
+  - 928
+  - 960
+  - 992
+  - 1024
+  max_size: 2048
+  # solver
+  display_iter: 20
+  snapshot_step: 1000
+  resume: false
+  begin_iteration: 0
+  max_iteration: 12000
+  decay_iteration:
+  - 9000
+  warmup_iteration: 1500
+  lr: 0.02
+  wd: 0.0001
+  momentum: 0.9
+  batch_size: 1
+
+  fcn_loss_weight: 1
+  fcn_with_roi_loss: false
+  panoptic_loss_weight: 0.5
+  panoptic_box_keep_fraction: 0.7
+
+  eval_data: true
+
+test:
+  scales:
+  - 1024
+  max_size: 2048
+  batch_size: 1
+  test_iteration: 12000
+  panoptic_stuff_area_limit: 2048
+  vis_mask: false
