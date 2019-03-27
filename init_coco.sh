@@ -1,6 +1,6 @@
 # install coco panoptic api
 
-if [ ! -f lib/dataset_devkit/panopticapi]; then
+if [ ! -d lib/dataset_devkit/panopticapi]; then
     git clone https://github.com/cocodataset/panopticapi lib/dataset_devkit/panopticapi
 fi
 

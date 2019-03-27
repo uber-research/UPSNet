@@ -11,7 +11,6 @@ fi
 pip install pyyaml pycocotools
 
 # Download panopticapi devkit
-mkdir -p lib/dataset_devkit
 git clone https://github.com/cocodataset/panopticapi lib/dataset_devkit/panopticapi
 
 # Build essential operators
