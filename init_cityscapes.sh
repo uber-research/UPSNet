@@ -13,6 +13,9 @@ if [ ! -f data/cityscapes/annotations/instancesonly_gtFine_val.json ]; then
     curl http://www.yuwenxiong.com/dataset/cityscapes/annotations/instancesonly_gtFine_val.json -o data/cityscapes/annotations/instancesonly_gtFine_val.json
 fi
 
+if [ ! -f data/cityscapes/annotations/cityscapes_fine_val.json ]; then
+    curl http://www.yuwenxiong.com/dataset/cityscapes/annotations/cityscapes_fine_val.json -o data/cityscapes/annotations/cityscapes_fine_val.json
+fi
 
 cd data/cityscapes
 
