@@ -1,4 +1,5 @@
 import json
+import copy
 
 
 if __name__ == "__main__":
@@ -13,7 +14,7 @@ if __name__ == "__main__":
         for idx, k in enumerate(pano_json['categories']):
             cat_idx_mapping[k['id']] = idx
 
-        pano_json_stff = pano_json.copy()
+        pano_json_stff = copy.deepcopy(pano_json)
         for k, v in idx_mapping.items():      
             pano_json_stff['categories'][k] = pano_json['categories'][v]
             pano_json_stff['categories'][k]['id'] = k
