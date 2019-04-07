@@ -73,7 +73,7 @@ Test:
 
 `python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/$EXP.yaml`
 
-We provied serveral config files (16/4 GPUs for Cityscapes/COCO dataset) under upsnet/experiments folder.
+We provide serveral config files (16/4 GPUs for Cityscapes/COCO dataset) under upsnet/experiments folder.
 
 # Model & Demo
 
