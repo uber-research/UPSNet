@@ -157,7 +157,7 @@ class resnet_upsnet(resnet_rcnn):
             mask_logits = self.mask_term(mask_score, gt_rois, cls_idx, fcn_output['fcn_score'])
 
             if self.enable_void:
-                void_logits = torch.max(fcn_output['fcn_score'][:, (config.dataset.num_classes - 1):, ...], dim=1, keepdim=True)[0] - torch.max(seg_inst_logits, dim=1, keepdim=True)[0]
+                void_logits = torch.max(fcn_output['fcn_score'][:, (config.dataset.num_seg_classes - config.dataset.num_classes + 1):, ...], dim=1, keepdim=True)[0] - torch.max(seg_inst_logits, dim=1, keepdim=True)[0]
                 inst_logits = seg_inst_logits + mask_logits
                 panoptic_logits = torch.cat([seg_logits, inst_logits, void_logits], dim=1)
             else:
