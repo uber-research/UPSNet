@@ -229,7 +229,7 @@ class resnet_upsnet(resnet_rcnn):
             })
 
             if self.enable_void:
-                void_logits = torch.max(fcn_output['fcn_output'][:, (config.dataset.num_classes-1):, ...], dim=1, keepdim=True)[0] - torch.max(seg_inst_logits, dim=1, keepdim=True)[0]
+                void_logits = torch.max(fcn_output['fcn_output'][:, (config.dataset.num_seg_classes - config.dataset.num_classes + 1):, ...], dim=1, keepdim=True)[0] - torch.max(seg_inst_logits, dim=1, keepdim=True)[0]
                 inst_logits = (seg_inst_logits + mask_logits)
                 panoptic_logits = torch.cat([seg_logits, inst_logits, void_logits], dim=1)
                 void_id = panoptic_logits.shape[1] - 1
