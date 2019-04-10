@@ -26,7 +26,7 @@ from upsnet.operators.functions.roialign import RoIAlignFunction
 from upsnet.operators.modules.view import View
 from upsnet.config.config import config
 
-if config.train.use_horovod:
+if config.train.use_horovod and config.network.use_syncbn:
     from upsnet.operators.modules.distbatchnorm import BatchNorm2d
 
 

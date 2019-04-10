@@ -175,12 +175,20 @@ def upsnet_train():
     if is_master:
         batch_end_callback[0](0, 0)
 
+    train_model.eval()
+
     # start training
     while curr_iter < config.train.max_iteration:
         if config.train.use_horovod:
             train_sampler.set_epoch(curr_iter)
 
-            train_model.eval() # freeze bn layer
+            if config.network.use_syncbn:
+                train_model.train()
+                if config.network.backbone_freeze_at > 0:
+                    train_model.freeze_backbone(config.network.backbone_freeze_at)
+                if config.network.backbone_fix_bn:
+                    train_model.resnet_backbone.eval()
+
 
             for inner_iter, batch in enumerate(train_loader):
                 data, label, _ = batch

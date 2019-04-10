@@ -22,7 +22,7 @@ from upsnet.config.config import config
 from upsnet.operators.modules.deform_conv import DeformConv, DeformConvWithOffset
 from upsnet.operators.modules.roialign import RoIAlign
 
-if config.train.use_horovod:
+if config.train.use_horovod and config.network.use_syncbn:
     from upsnet.operators.modules.distbatchnorm import BatchNorm2d
 
 

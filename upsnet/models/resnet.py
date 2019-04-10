@@ -23,7 +23,7 @@ from upsnet.config.config import config
 import torch.utils.checkpoint
 
 
-if not config.network.backbone_fix_bn:
+if not config.network.backbone_fix_bn and config.network.use_syncbn:
     from upsnet.operators.modules.distbatchnorm import BatchNorm2d
     nn.BatchNorm2d = BatchNorm2d
 
