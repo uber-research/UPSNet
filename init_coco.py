@@ -28,6 +28,11 @@ if __name__ == "__main__":
         for anno in pano_json_stff['annotations']:
             for segments_info in anno['segments_info']:
                 segments_info['category_id'] = inv_idx_mapping[cat_idx_mapping[segments_info['category_id']]]
+
+        for img in pano_json_stff['images']:
+             img['file_name'] = img['file_name'].replace('jpg', 'png')
+        if s == 'val':
+            pano_json_stff['images'] = sorted(pano_json_stff['images'], key=lambda x: x['id'])
         
         json.dump(pano_json_stff, open('data/coco/annotations/panoptic_{}2017_stff.json'.format(s), 'w'))
 
