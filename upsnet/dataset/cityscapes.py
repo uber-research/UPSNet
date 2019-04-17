@@ -287,13 +287,13 @@ class Cityscapes(BaseDataset):
         self.classes = [
             '__background__',
             'person',
-            'bicycle',
-            'train',
-            'truck',
-            'motorcycle',
-            'bus',
-            'car',
             'rider',
+            'car',
+            'truck',
+            'bus',
+            'train',
+            'motorcycle',
+            'bicycle',
         ]
 
         if save_path is not None:
