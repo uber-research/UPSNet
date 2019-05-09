@@ -284,7 +284,7 @@ class resnet_upsnet(resnet_rcnn):
     def get_gt_rois(self, roidb, im_info):
         gt_inds = np.where((roidb['gt_classes']) > 0 & (roidb['is_crowd'] == 0))[0]
         rois = roidb['boxes'][gt_inds] * im_info[0, 2]
-        cls_idx = roidb['gt_classes']
+        cls_idx = roidb['gt_classes'][gt_inds]
         return torch.from_numpy(np.hstack((np.zeros((rois.shape[0], 1), dtype=np.float32), rois))), torch.from_numpy(cls_idx).long()
 
 def resnet_101_upsnet():

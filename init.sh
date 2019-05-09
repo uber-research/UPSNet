@@ -1,8 +1,8 @@
 # Download pretrained models
-if [ ! -f model/pretrained_model/resnet-101-caffe.pth]; then
+if [ ! -f model/pretrained_model/resnet-101-caffe.pth ]; then
     curl http://www.yuwenxiong.com/pretrained_model/resnet-101-caffe.pth -o model/pretrained_model/resnet-101-caffe.pth
 fi
-if [ ! -f model/pretrained_model/resnet-50-caffe.pth]; then
+if [ ! -f model/pretrained_model/resnet-50-caffe.pth ]; then
     curl http://www.yuwenxiong.com/pretrained_model/resnet-50-caffe.pth -o model/pretrained_model/resnet-50-caffe.pth
 fi
 

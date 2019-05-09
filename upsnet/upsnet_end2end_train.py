@@ -379,7 +379,7 @@ def upsnet_train():
                     except Exception:
                         break
 
-            s = 'Batch [%d]\t Epoch[%d]\t' % (curr_iter, curr_iter // len(train_loader) // num_gpus)
+            s = 'Batch [%d]\t Epoch[%d]\t' % (curr_iter, curr_iter // len(train_loader))
 
             for metric in metrics:
                 m, v = metric.get()
