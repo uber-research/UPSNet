@@ -49,7 +49,7 @@ class MaskMatching(nn.Module):
             gt_masks = gt_masks[keep_inds]
 
         for i in range(gt_masks.shape[0]):
-            matched_gt[gt_masks[[i], :, :] != 0] = i + self.num_seg_classes - self.num_inst_classes
+            matched_gt[gt_masks[[i], :, :] != 0 & gt_masks[[i], :, :] != 255] = i + self.num_seg_classes - self.num_inst_classes
         if keep_inds is not None:
             matched_gt[matched_gt == -1] = self.num_seg_classes - self.num_inst_classes + gt_masks.shape[0]
         else:
