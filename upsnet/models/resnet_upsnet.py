@@ -30,6 +30,9 @@ from upsnet.operators.modules.mask_roi import MaskROI
 from upsnet.operators.modules.unary_logits import MaskTerm, SegTerm
 from upsnet.operators.modules.mask_removal import MaskRemoval
 from upsnet.operators.modules.mask_matching import MaskMatching
+if config.train.use_horovod and config.network.use_syncbn:
+    from upsnet.operators.modules.distbatchnorm import BatchNorm2d
+
 
 
 class resnet_upsnet(resnet_rcnn):
@@ -259,7 +262,7 @@ class resnet_upsnet(resnet_rcnn):
         gn_params = []
         gn_params_name = []
         for n, m in self.named_modules():
-            if isinstance(m, nn.GroupNorm):
+            if isinstance(m, nn.GroupNorm) or (config.train.use_horovod and config.network.use_syncbn and isinstance(m, BatchNorm2d)):
                 gn_params.append(m.weight)
                 gn_params.append(m.bias)
                 gn_params_name.append(n + '.weight')
@@ -282,7 +285,7 @@ class resnet_upsnet(resnet_rcnn):
         return ret
 
     def get_gt_rois(self, roidb, im_info):
-        gt_inds = np.where((roidb['gt_classes']) > 0 & (roidb['is_crowd'] == 0))[0]
+        gt_inds = np.where((roidb['gt_classes'] > 0) & (roidb['is_crowd'] == 0))[0]
         rois = roidb['boxes'][gt_inds] * im_info[0, 2]
         cls_idx = roidb['gt_classes'][gt_inds]
         return torch.from_numpy(np.hstack((np.zeros((rois.shape[0], 1), dtype=np.float32), rois))), torch.from_numpy(cls_idx).long()

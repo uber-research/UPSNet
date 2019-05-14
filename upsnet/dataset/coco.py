@@ -155,24 +155,28 @@ class coco(BaseDataset):
                     seg_gt = np.fliplr(seg_gt)
                 seg_gt = cv2.resize(seg_gt, None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
                 label.update({'seg_gt': seg_gt})
-                label.update({'gt_classes': label['roidb']['gt_classes']})
+                label.update({'gt_classes': label['roidb']['gt_classes'][label['roidb']['is_crowd'] == 0]})
                 label.update({'mask_gt': np.zeros((len(label['gt_classes']), im_blob.shape[-2], im_blob.shape[-1]))})
-                for i in range(len(label['gt_classes'])):
+                idx = 0
+                for i in range(len(label['roidb']['gt_classes'])):
+                    if label['roidb']['is_crowd'][i] != 0:
+                        continue
                     if type(label['roidb']['segms'][i]) is list and type(label['roidb']['segms'][i][0]) is list:
                         img = Image.new('L', (int(np.round(im_blob.shape[-1] / im_scales[0])), int(np.round(im_blob.shape[-2] / im_scales[0]))), 0)
                         for j in range(len(label['roidb']['segms'][i])):
                             ImageDraw.Draw(img).polygon(tuple(label['roidb']['segms'][i][j]), outline=1, fill=1)
-                        label['mask_gt'][i] = cv2.resize(np.array(img), None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
+                        label['mask_gt'][idx] = cv2.resize(np.array(img), None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
                     else:
                         assert type(label['roidb']['segms'][i]) is dict or type(label['roidb']['segms'][i][0]) is dict
                         if type(label['roidb']['segms'][i]) is dict:
-                            label['mask_gt'][i] = cv2.resize(mask_util.decode(mask_util.frPyObjects([label['roidb']['segms'][i]], label['roidb']['segms'][i]['size'][0], label['roidb']['segms'][i]['size'][1]))[:, :, 0], None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
+                            label['mask_gt'][idx] = cv2.resize(mask_util.decode(mask_util.frPyObjects([label['roidb']['segms'][i]], label['roidb']['segms'][i]['size'][0], label['roidb']['segms'][i]['size'][1]))[:, :, 0], None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
                         else:
                             assert len(label['roidb']['segms'][i]) == 1
                             output = mask_util.decode(label['roidb']['segms'][i])
-                            label['mask_gt'][i] = cv2.resize(output[:, :, 0], None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
+                            label['mask_gt'][idx] = cv2.resize(output[:, :, 0], None, None, fx=im_scales[0], fy=im_scales[0], interpolation=cv2.INTER_NEAREST)
+                    idx += 1
                 if config.train.fcn_with_roi_loss:
-                    gt_boxes = label['roidb']['boxes'][np.where(label['roidb']['gt_classes'] > 0)[0]]
+                    gt_boxes = label['roidb']['boxes'][np.where((label['roidb']['gt_classes'] > 0) & (label['roidb']['is_crowd'] == 0))[0]]
                     gt_boxes = np.around(gt_boxes * im_scales[0]).astype(np.int32)
                     label.update({'seg_roi_gt': np.zeros((len(gt_boxes), config.network.mask_size, config.network.mask_size), dtype=np.int64)})
                     for i in range(len(gt_boxes)):
