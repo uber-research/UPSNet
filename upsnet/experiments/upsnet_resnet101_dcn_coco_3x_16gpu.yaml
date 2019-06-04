@@ -1,0 +1,67 @@
+---
+output_path: "./output/upsnet/coco"
+model_prefix: "upsnet_resnet_101_coco_"
+symbol: resnet_101_upsnet
+gpus: '0'
+dataset:
+  num_classes: 81
+  num_seg_classes: 133
+  dataset: coco
+  dataset_path: "./data/coco/"
+  image_set: train2017
+  root_path: "./data/"
+  test_image_set: val2017
+
+network:
+  has_rpn: true
+  has_rcnn: true
+  has_mask_head: true
+  has_fcn_head: true
+  fcn_head: "FCNHead"
+  has_panoptic_head: true
+  pretrained: "./model/pretrained_model/resnet-101-caffe.pth"
+  fpn_with_gap: true
+  backbone_with_dconv: 3
+
+train:
+  use_horovod: true
+  scales:
+  - 640
+  - 672
+  - 704
+  - 736
+  - 768
+  - 800
+  - 832
+  max_size: 1333
+  # solver
+  display_iter: 20
+  snapshot_step: 2000
+  resume: false
+  begin_iteration: 0
+  max_iteration: 270000
+  decay_iteration:
+  - 210000
+  - 250000
+  warmup_iteration: 1500
+  lr: 0.02
+  wd: 0.0001
+  momentum: 0.9
+  batch_size: 1
+
+  fcn_loss_weight: 0.2
+  fcn_with_roi_loss: true
+  panoptic_loss_weight: 0.1
+  panoptic_box_keep_fraction: 0.7
+
+  eval_data: true
+
+test:
+  scales:
+  - 800
+  max_size: 1333
+  batch_size: 1
+  test_iteration: 270000
+  panoptic_stuff_area_limit: 4096
+  vis_mask: false
+

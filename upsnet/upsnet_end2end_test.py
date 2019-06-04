@@ -186,8 +186,12 @@ def upsnet_test():
 
     # preparing
     curr_iter = config.test.test_iteration
-    test_model.load_state_dict(torch.load(os.path.join(os.path.join(os.path.join(config.output_path, os.path.basename(args.cfg).split('.')[0]),
-                               '_'.join(config.dataset.image_set.split('+')), config.model_prefix+str(curr_iter)+'.pth'))), resume=True)
+    if args.weight_path == '':
+        test_model.load_state_dict(torch.load(os.path.join(os.path.join(os.path.join(config.output_path, os.path.basename(args.cfg).split('.')[0]),
+                                   '_'.join(config.dataset.image_set.split('+')), config.model_prefix+str(curr_iter)+'.pth'))), resume=True)
+    else:
+        test_model.load_state_dict(torch.load(args.weight_path), resume=True)
+
 
     for p in test_model.parameters():
         p.requires_grad = False
