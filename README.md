@@ -75,8 +75,35 @@ Test:
 
 We provide serveral config files (16/4 GPUs for Cityscapes/COCO dataset) under upsnet/experiments folder.
 
-# Model & Demo
+# Model Weights
 
-The model weights that can reproduce numbers in our paper and the demo will be coming soon.
+The model weights that can reproduce numbers in our paper are available now. Please follow these steps to use them:
+
+Run `download_weights.sh` to get trained model weights for Cityscapes and COCO.
+
+For Cityscapes:
+
+```shell
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_cityscapes_16gpu.yaml --weight_path ./model/upsnet_resnet_50_cityscapes_12000.pth
+```
+
+```shell
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet101_cityscapes_w_coco_16gpu.yaml --weight_path ./model/upsnet_resnet_101_cityscapes_w_coco_3000.pth
+```
+
+For COCO:
+
+```shell
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet50_coco_16gpu.yaml --weight_path model/upsnet_resnet_50_coco_90000.pth
+```
+
+```shell
+python upsnet/upsnet_end2end_test.py --cfg upsnet/experiments/upsnet_resnet101_dcn_coco_3x_16gpu.yaml --weight_path model/upsnet_resnet_101_dcn_coco_270000.pth
+```
+
+
+
+
+
 
 
